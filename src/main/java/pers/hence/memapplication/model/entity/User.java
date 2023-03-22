@@ -11,50 +11,46 @@ import java.time.LocalDateTime;
 
 /**
  * @author https://github.com/Mr-Jacks520
- * @date 2023/3/12 12:57
- * @Description 记忆内容实体类
+ * @date 2023/3/22 23:05
+ * @description 用户类
  */
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@TableName("mem_content")
-public class MemContent implements Serializable {
+@TableName("user")
+public class User implements Serializable {
 
+    /**
+     * 用户ID
+     */
     @TableId(type = IdType.AUTO)
     private Integer id;
 
     /**
-     * 标题
+     * 用户名
      */
-    private String title;
+    private String userName;
 
     /**
-     * 内容
+     * 用户密码
      */
-    private String content;
+    private String userPass;
 
     /**
-     * 类型
+     * 用户性别
      */
-    private Integer type;
+    private Integer userSex;
 
     /**
-     * 大小
+     * 用户头像
      */
-    private String size;
+    private String userAvatar;
 
     /**
-     * 复习时间
+     * 用户邮箱
      */
-    @TableField("review_time")
-    private LocalDateTime reviewTime;
-
-    /**
-     * 存储路径
-     */
-    private String storagePath;
+    private String userMail;
 
     /**
      * 逻辑删除
@@ -75,7 +71,7 @@ public class MemContent implements Serializable {
     private LocalDateTime createdTime;
 
     /**
-     * 用户ID
+     * 管理员标识
      */
-    private Integer userId;
+    private Integer isAdmin;
 }

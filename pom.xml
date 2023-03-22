@@ -64,6 +64,12 @@
             <version>1.1.18</version>
         </dependency>
 
+        <!-- hutool-crypto 加解密 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-crypto</artifactId>
+            <version>5.7.22</version>
+        </dependency>
 
 
     </dependencies>

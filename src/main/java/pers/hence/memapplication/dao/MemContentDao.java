@@ -8,7 +8,7 @@ import pers.hence.memapplication.model.entity.MemContent;
 /**
  * @Author https://github.com/Mr-Jacks520
  * @Date 2023/3/12 13:05
- * @Description
+ * @Description 记忆内容持久层
  */
 
 @Repository
