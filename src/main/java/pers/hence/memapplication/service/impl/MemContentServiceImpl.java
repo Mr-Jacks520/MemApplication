@@ -9,7 +9,7 @@ import pers.hence.memapplication.service.MemContentService;
 /**
  * @Author https://github.com/Mr-Jacks520
  * @Date 2023/3/12 13:53
- * @Description 记忆内容服务具体实现类
+ * @Description 记忆内容服务业务层
  */
 
 @Service

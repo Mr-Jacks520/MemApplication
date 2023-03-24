@@ -1,56 +1,43 @@
 package pers.hence.memapplication.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * @author https://github.com/Mr-Jacks520
- * @date 2023/3/22 23:05
- * @description 用户类
+ * @date 2023/3/23 17:03
+ * @description 引导页
  */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-@TableName("user")
-public class User implements Serializable {
+@TableName("leading_page")
+public class LeadingPage implements Serializable {
 
     /**
-     * 用户ID
+     * ID
      */
     @TableId(type = IdType.AUTO)
     private Integer id;
 
     /**
-     * 用户名
+     * 引导页标题
      */
-    private String userName;
+    private String leadingTitle;
 
     /**
-     * 用户密码
+     * 引导页正文
      */
-    private String userPass;
+    private String leadingContent;
 
     /**
-     * 用户性别
+     * 引导页图片URL
      */
-    private Integer userSex;
-
-    /**
-     * 用户头像
-     */
-    private String userAvatar;
-
-    /**
-     * 用户邮箱
-     */
-    private String userMail;
+    private String leadingImage;
 
     /**
      * 逻辑删除
@@ -69,9 +56,4 @@ public class User implements Serializable {
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime createdTime;
-
-    /**
-     * 管理员标识
-     */
-    private Integer isAdmin;
 }
