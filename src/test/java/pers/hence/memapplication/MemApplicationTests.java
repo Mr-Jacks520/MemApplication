@@ -1,20 +1,20 @@
 package pers.hence.memapplication;
 
 import cn.hutool.crypto.SecureUtil;
-import cn.hutool.crypto.digest.MD5;
-import org.apache.tomcat.util.security.MD5Encoder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mail.javamail.JavaMailSender;
 import pers.hence.memapplication.dao.LeadingPageDao;
 import pers.hence.memapplication.dao.MemContentDao;
 import pers.hence.memapplication.dao.UserDao;
 import pers.hence.memapplication.model.entity.LeadingPage;
+import pers.hence.memapplication.model.entity.MailMessage;
 import pers.hence.memapplication.model.entity.MemContent;
 import pers.hence.memapplication.model.entity.User;
+import pers.hence.memapplication.util.RedisUtil;
 
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
+import javax.annotation.Resource;
 
 @SpringBootTest
 class MemApplicationTests {
@@ -27,6 +27,15 @@ class MemApplicationTests {
 
     @Autowired
     private LeadingPageDao leadingPageDao;
+
+    @Autowired
+    private RedisUtil redisUtil;
+
+    @Resource
+    private JavaMailSender sender;
+
+    @Autowired
+    private MailMessage mailMessage;
 
     /**
      * 测试记忆内容
@@ -69,6 +78,17 @@ class MemApplicationTests {
 
 //        LeadingPage select = leadingPageDao.selectById(1);
 //        System.out.println(select);
+    }
+
+    @Test
+    void testRedis() {
+        redisUtil.set("test", "tessssssssssssssssff你是地方");
+        System.out.println(redisUtil.get("test"));
+    }
+
+    @Test
+    void testSendMail() {
+        sender.send(mailMessage.create("1286624819@qq.com", "test", "test"));
     }
 
 }
