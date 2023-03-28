@@ -31,11 +31,6 @@ public class MemContent implements Serializable {
     private String title;
 
     /**
-     * 内容
-     */
-    private String content;
-
-    /**
      * 类型
      */
     private Integer type;

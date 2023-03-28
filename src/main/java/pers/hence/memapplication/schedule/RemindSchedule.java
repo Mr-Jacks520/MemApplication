@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 import pers.hence.memapplication.service.MemContentService;
 
 /**
- * @Author https://github.com/Mr-Jacks520
- * @Date 2023/3/12 12:33
+ * @author https://github.com/Mr-Jacks520
+ * @date 2023/3/12 12:33
  * @Description 定时提醒组件
  */
 
