@@ -3,6 +3,7 @@ package pers.hence.memapplication.util;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.lang.UUID;
+import cn.hutool.crypto.digest.DigestUtil;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.ObjectMetadata;
@@ -105,6 +106,34 @@ public class OSSUtil {
     }
 
     /**
+     * 获取文件类型
+     * @param suffix 后缀
+     * @return 类别序号
+     */
+    public static int getFileType(String suffix) {
+        if (null == suffix) {
+            return -1;
+        }
+        if (StringUtils.isBlank(suffix)) {
+            return -1;
+        }
+
+        if (TXT_TYPE.equals(suffix)) {
+            return MemType.TXT.getType();
+        }else if (PDF_TYPE.equals(suffix)) {
+            return MemType.PDF.getType();
+        }else if (WORD_TYPE.contains(suffix)) {
+            return MemType.WORD.getType();
+        }else if (IMAGE_TYPE.contains(suffix)) {
+            return MemType.IMAGE.getType();
+        }else if (MUSIC_TYPE.equals(suffix)) {
+            return MemType.MUSIC.getType();
+        }else {
+            return -1;
+        }
+    }
+
+    /**
      * 上传文件
      * @param file 文件
      * @return 文件存储路径
@@ -114,15 +143,21 @@ public class OSSUtil {
         // 1. 获取OSSClient实例
         OSS client = getOSSClient();
         // 2. 构造上传路径
+        String md5 = DigestUtil.md5Hex(file.getBytes());
         String suffix = FileNameUtil.extName(file.getOriginalFilename());
-        String fileName = UUID.randomUUID() + "." +  suffix;
+        String fileName = md5 + "." +  suffix;
         String uploadPath = getFilePath(suffix) + "/" + DateUtil.today() + "/" + fileName;
-        // 3. 获取元信息
+        // 3. 判断文件是否存在,存在直接返回存储路径
+        boolean exist = client.doesObjectExist(ossConfig.getBucketName(), uploadPath);
+        if (exist) {
+            return ossConfig.getBucketUrl() + "/" + uploadPath;
+        }
+        // 4. 获取元信息
         ObjectMetadata metaInfo = getFileMetaInfo(suffix);
         if (null == metaInfo) {
             return null;
         }
-        // 4. 上传
+        // 5. 上传
         byte[] content = file.getBytes();
         PutObjectRequest request =
                 new PutObjectRequest(ossConfig.getBucketName(),
@@ -133,4 +168,5 @@ public class OSSUtil {
         client.shutdown();
         return ossConfig.getBucketUrl() + "/" + uploadPath;
     }
+
 }
