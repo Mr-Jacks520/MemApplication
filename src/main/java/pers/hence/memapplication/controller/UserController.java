@@ -2,10 +2,12 @@ package pers.hence.memapplication.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import pers.hence.memapplication.exception.BusinessException;
 import pers.hence.memapplication.model.request.UserLoginRequest;
 import pers.hence.memapplication.model.request.UserRegisterRequest;
@@ -13,9 +15,12 @@ import pers.hence.memapplication.model.request.UserSendMailRequest;
 import pers.hence.memapplication.model.vo.Result;
 import pers.hence.memapplication.model.vo.UserVO;
 import pers.hence.memapplication.service.UserService;
+import pers.hence.memapplication.util.OSSUtil;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+
+import java.io.IOException;
 
 import static pers.hence.memapplication.constant.StatusCode.*;
 
@@ -31,6 +36,9 @@ public class UserController {
 
     @Resource
     private UserService userService;
+
+    @Autowired
+    private OSSUtil ossUtil;
 
     @PostMapping("/sendCode")
     public Result<?> sendVerifyCode(@RequestBody UserSendMailRequest userSendMailRequest) {
@@ -72,7 +80,16 @@ public class UserController {
             return Result.fail("参数为空");
         }
         UserVO userVO = userService.userLogin(userMail, userPass, request);
-        return Result.sucess("登录成功", userVO);
+        return Result.sucess("", userVO);
+    }
+
+    @PostMapping("/upload")
+    public Result<?> upload(MultipartFile file) {
+        if (file == null) {
+            return Result.fail("文件为空");
+        }
+
+        return Result.fail("eee");
     }
 
 }

@@ -125,17 +125,14 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         if (StringUtils.isAnyBlank(userMail, userPassword)) {
             return null;
         }
-        if (userMail.length() < 8) {
-            return null;
-        }
-        if (userPassword.length() < 8) {
+        if (userPassword.length() < PASS_MIN) {
             return null;
         }
         // 邮箱应当合法
         String validPattern = "/^([a-zA-Z\\d][\\w-]{2,})@(\\w{2,})\\.([a-z]{2,})(\\.[a-z]{2,})?$/";
         Matcher matcher = Pattern.compile(validPattern).matcher(userMail);
         if (matcher.find()) {
-            return null;
+            throw new BusinessException(ERROR, "邮箱格式非法");
         }
 
         // 加密
@@ -155,17 +152,19 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         return safetyUser;
     }
 
+
     /**
      * 发送验证码
      * @param mailTo 发送对象
      */
+
     @Override
     public void userSendCode(String mailTo) {
         // 邮箱应当合法
         String validPattern = "/^([a-zA-Z\\d][\\w-]{2,})@(\\w{2,})\\.([a-z]{2,})(\\.[a-z]{2,})?$/";
         Matcher matcher = Pattern.compile(validPattern).matcher(mailTo);
         if (matcher.find()) {
-            return;
+            throw new BusinessException(ERROR, "邮箱格式非法");
         }
         Map<String, String> map = new HashMap<>(2);
         map.put("mail", mailTo);

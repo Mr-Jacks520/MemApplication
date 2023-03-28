@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mail.javamail.JavaMailSender;
+import pers.hence.memapplication.constant.MemType;
 import pers.hence.memapplication.dao.LeadingPageDao;
 import pers.hence.memapplication.dao.MemContentDao;
 import pers.hence.memapplication.dao.UserDao;
@@ -42,9 +43,11 @@ class MemApplicationTests {
      */
     @Test
     void contextLoads() {
-        MemContent memContent = memContentDao.selectById(4);
-        int ret = memContentDao.updateById(memContent);
-        System.out.println(ret + " 更新成功!");
+//        MemContent memContent = memContentDao.selectById(4);
+//        int ret = memContentDao.updateById(memContent);
+//        System.out.println(ret + " 更新成功!");
+        String a = MemType.IMAGE.getPath();
+        System.out.println(a);
     }
 
     /**
