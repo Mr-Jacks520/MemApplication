@@ -277,7 +277,7 @@ public class RedisUtil {
      * @param key 键
      * @return
      */
-    public Map<Object, Object> getHashEntries(String key) {
+    public Map<String, Object> getHashEntries(String key) {
         return redisTemplate.opsForHash().entries(key);
     }
 
@@ -365,7 +365,7 @@ public class RedisUtil {
      * @param key
      * @return
      */
-    public Set<Object> hashKeys(String key) {
+    public Set<String> hashKeys(String key) {
         return redisTemplate.opsForHash().keys(key);
     }
 
@@ -382,10 +382,10 @@ public class RedisUtil {
     /**
      * 向Map中添加元素
      * @param key
-     * @param hasKey
+     * @param hashKey
      * @param value
      */
-    public void put(String key, String hasKey, long value){redisTemplate.opsForHash().put(key, hasKey, value);}
+    public void put(String key, String hashKey, long value){redisTemplate.opsForHash().put(key, hashKey, value);}
 
     //- - - - - - - - - - - - - - - - - - - - -  list类型 - - - - - - - - - - - - - - - - - - - -
 

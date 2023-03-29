@@ -70,7 +70,6 @@ public class MemContentServiceImpl extends ServiceImpl<MemContentDao, MemContent
                 .size(fileSize)
                 .storagePath(HTTP_PREFIX + path)
                 // 复习时间
-                .reviewTime(DateUtil.toLocalDateTime(DateUtil.date()))
                 .userId(currentUser)
                 .build();
         // 5. 保存至数据库

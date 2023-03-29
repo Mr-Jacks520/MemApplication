@@ -2,7 +2,6 @@ package pers.hence.memapplication.util;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.file.FileNameUtil;
-import cn.hutool.core.lang.UUID;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
@@ -16,7 +15,6 @@ import pers.hence.memapplication.config.OSSConfig;
 import pers.hence.memapplication.constant.MemType;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 
 /**

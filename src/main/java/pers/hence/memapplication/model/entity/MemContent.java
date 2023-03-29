@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.time.LocalDateTime;
 
 /**
@@ -41,10 +42,19 @@ public class MemContent implements Serializable {
     private String size;
 
     /**
-     * 复习时间
+     * 复习时间列表JSON
      */
-    @TableField("review_time")
-    private LocalDateTime reviewTime;
+    private String reviewTimes;
+
+    /**
+     * 下次复习时间
+     */
+    private String nextReview;
+
+    /**
+     * 是否需要进行提醒复习
+     */
+    private Integer isComplete;
 
     /**
      * 存储路径
