@@ -14,12 +14,16 @@ import pers.hence.memapplication.model.vo.MemContentVO;
 import pers.hence.memapplication.schedule.events.PreCachedEvent;
 import pers.hence.memapplication.schedule.events.RemindEvent;
 import pers.hence.memapplication.service.MemContentService;
+import pers.hence.memapplication.util.AlgorithmUtils;
 import pers.hence.memapplication.util.BeanCopyUtils;
 import pers.hence.memapplication.util.RedisUtil;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -55,31 +59,27 @@ public class RemindSchedule {
     private RedisUtil redisUtil;
 
     /**
-     * 测试定时提醒用户复习: 5 minutes
+     * 定时提醒用户复习:每天22点提醒一次
      */
-    @Scheduled(fixedRate = 60 * 5)
+    @Scheduled(cron = "0 0 22 * * *")
     public void remind() {
         // 1. 获取Redis中的内容
         Set<String> userIds = redisUtil.hashKeys(GlobalConstant.PREJOB_PREFIX);
-        Map<Integer, String> task = new ConcurrentHashMap<>(userIds.size());
-        for (String userId : userIds) {
-            task.put(Integer.parseInt(userId), GlobalConstant.REMIND_MESSAGE);
-        }
         // 2. 创建事件
-        RemindEvent remindEvent = new RemindEvent(task);
+        RemindEvent remindEvent = new RemindEvent(userIds);
         // 3. 发布事件
         applicationContext.publishEvent(remindEvent);
         log.info("提醒事件发布完成");
     }
 
     /**
-     * 测试定时缓存预热
+     * 定时缓存预热:每天3点执行一次
      */
-    @Scheduled(fixedRate = 60 * 4)
+    @Scheduled(cron = "0 0 3 * * *")
     public void cacheMemContent() {
         // 获取当前日期
         String curTime = DateUtil.today();
-        // 1. 从数据库中查出所有数据
+        // 1. 从数据库中查出所有记忆内容
         QueryWrapper<MemContent> queryWrapper = new QueryWrapper<>();
         queryWrapper
                 .eq("is_complete", 0)
@@ -93,18 +93,27 @@ public class RemindSchedule {
             try {
                 int compare = DateUtil.compare(DateFormat.getDateInstance().parse(curTime), DateFormat.getDateInstance().parse(nextReview));
                 if (compare < 0) {
-                    // TODO: 重新生成复习时间表并写入数据库
-                    log.info("ops...");
+                    // 重新生成复习时间表并刷入数据库
+                    String timePoints = AlgorithmUtils.ebenhausCurve(curTime);
+                    String nextReviewTime = AlgorithmUtils.getNextReviewTime(curTime);
+                    memContent.setReviewTimes(timePoints);
+                    memContent.setNextReview(nextReviewTime);
+                    // 刷入数据库不进行此次缓存
+                    QueryWrapper<MemContent> query = new QueryWrapper<>();
+                    query.eq("id", memContent.getId());
+                    memContentService.update(query);
+                } else if (compare == 0) {
+                    // 相等加入缓存预热
+                    Integer userId = memContent.getUserId();
+                    MemContentVO contentVO = BeanCopyUtils.copyObject(memContent, MemContentVO.class);
+                    List<MemContentVO> voList = task.getOrDefault(userId, new ArrayList<>());
+                    voList.add(contentVO);
+                    task.put(userId, voList);
                 }
+                // 若大于什么都不管,说明此时未到复习时间
             } catch (ParseException e) {
                 log.info(e.getMessage());
-                continue;
             }
-            Integer userId = memContent.getUserId();
-            MemContentVO contentVO = BeanCopyUtils.copyObject(memContent, MemContentVO.class);
-            List<MemContentVO> voList = task.getOrDefault(userId, new ArrayList<>());
-            voList.add(contentVO);
-            task.put(userId, voList);
         }
         // 4. 创建缓存事件
         PreCachedEvent preCachedEvent = new PreCachedEvent(task);

@@ -2,7 +2,7 @@ package pers.hence.memapplication.schedule.events;
 
 import org.springframework.context.ApplicationEvent;
 
-import java.util.Map;
+import java.util.Set;
 
 /**
  * @author https://github.com/Mr-Jacks520
@@ -11,14 +11,14 @@ import java.util.Map;
  */
 public class RemindEvent extends ApplicationEvent implements BaseEvent {
 
-    private final Map<Integer, String> remindMessage;
+    private final Set<String> userIds;
 
-    public RemindEvent(Map<Integer, String> remindMessage) {
-        super(remindMessage);
-        this.remindMessage = remindMessage;
+    public RemindEvent(Set<String> userIds) {
+        super(userIds);
+        this.userIds = userIds;
     }
 
-    public Map<Integer, String> getRemindMessage() {
-        return remindMessage;
+    public Set<String> getUserIds() {
+        return userIds;
     }
 }

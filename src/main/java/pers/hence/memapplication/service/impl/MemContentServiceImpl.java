@@ -1,6 +1,5 @@
 package pers.hence.memapplication.service.impl;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.file.FileNameUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -11,18 +10,16 @@ import pers.hence.memapplication.constant.UserConstant;
 import pers.hence.memapplication.dao.MemContentDao;
 import pers.hence.memapplication.exception.BusinessException;
 import pers.hence.memapplication.model.entity.MemContent;
-import pers.hence.memapplication.model.entity.User;
 import pers.hence.memapplication.model.vo.UserVO;
 import pers.hence.memapplication.service.MemContentService;
 import pers.hence.memapplication.util.OSSUtil;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 
+import static pers.hence.memapplication.constant.GlobalConstant.HTTP_PREFIX;
 import static pers.hence.memapplication.constant.StatusCode.*;
-import static pers.hence.memapplication.constant.GlobalConstant.*;
 
 /**
  * @author https://github.com/Mr-Jacks520
