@@ -1,5 +1,6 @@
 package pers.hence.memapplication.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.file.FileNameUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,7 @@ import pers.hence.memapplication.exception.BusinessException;
 import pers.hence.memapplication.model.entity.MemContent;
 import pers.hence.memapplication.model.vo.UserVO;
 import pers.hence.memapplication.service.MemContentService;
+import pers.hence.memapplication.util.AlgorithmUtils;
 import pers.hence.memapplication.util.OSSUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -61,15 +63,20 @@ public class MemContentServiceImpl extends ServiceImpl<MemContentDao, MemContent
         String suffix = FileNameUtil.extName(file.getOriginalFilename());
         String fileSize = BigDecimal.valueOf((double) file.getSize() / 1024 / 1024)
                 .divide(new BigDecimal(1), 2, BigDecimal.ROUND_HALF_UP) + "M";
+        // 5. 生成复习时间表
+        String reviewTimes = AlgorithmUtils.ebenhausCurve(DateUtil.today());
         MemContent memContent = MemContent.builder()
                 .title(fileName)
                 .type(OSSUtil.getFileType(suffix))
                 .size(fileSize)
                 .storagePath(HTTP_PREFIX + path)
-                // 复习时间
+                // 复习时间表
+                .reviewTimes(reviewTimes)
+                // 下次复习时间
+                .nextReview(AlgorithmUtils.getNextReviewTime(DateUtil.today()))
                 .userId(currentUser)
                 .build();
-        // 5. 保存至数据库
+        // 6. 保存至数据库
         boolean isSave = this.save(memContent);
         if (!isSave) {
             throw new BusinessException(INTERNAL_ERROR, "文件保存失败");
