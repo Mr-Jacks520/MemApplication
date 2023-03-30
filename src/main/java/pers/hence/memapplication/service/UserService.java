@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author https://github.com/Mr-Jacks520
  * @date 2023/3/23 17:50
- * @description
+ * @description 用户业务接口层
  */
 public interface UserService extends IService<User> {
 
@@ -36,4 +36,18 @@ public interface UserService extends IService<User> {
      * @param mailTo 发送对象
      */
     void userSendCode(String mailTo);
+
+    /**
+     * 用户请求更改自己的信息
+     * @param userVO 用户更新视图
+     * @param request request
+     */
+    void updateUserInfo(UserVO userVO, HttpServletRequest request);
+
+    /**
+     * 获取登录用户
+     * @param request request
+     * @return userVO
+     */
+    UserVO getLoginUser(HttpServletRequest request);
 }

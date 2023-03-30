@@ -9,6 +9,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+import pers.hence.memapplication.constant.UserConstant;
 import pers.hence.memapplication.dao.UserDao;
 import pers.hence.memapplication.exception.BusinessException;
 import pers.hence.memapplication.model.entity.User;
@@ -25,10 +26,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static pers.hence.memapplication.constant.MailConfig.REDIS_MAIL_KEY_PREFIX;
 import static pers.hence.memapplication.constant.RabbitMQPrefix.MAIL_QUEUE;
 import static pers.hence.memapplication.constant.StatusCode.*;
-import static pers.hence.memapplication.constant.MailConfig.*;
-import static pers.hence.memapplication.constant.UserConstant.*;
+import static pers.hence.memapplication.constant.UserConstant.USER_LOGIN_STATE;
 
 /**
  * @author https://github.com/Mr-Jacks520
@@ -54,9 +55,15 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
      */
     private static final String SALT = "hj";
 
+    /**
+     * 默认用户名前缀
+     */
     private static final String USER_NAME_PREFIX = "kz-";
 
 
+    /**
+     * 密码最短长度
+     */
     private static final int PASS_MIN = 8;
 
     /**
@@ -171,5 +178,45 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         map.put("code", String.valueOf(RandomUtil.randomInt(1000, 9999)));
         // 异步发送
         rabbitTemplate.convertAndSend(MAIL_QUEUE, map);
+    }
+
+    /**
+     * 获取登录用户
+     * @param request request
+     * @return 登录用户
+     */
+    @Override
+    public UserVO getLoginUser(HttpServletRequest request) {
+        if (null == request) {
+            return null;
+        }
+        Object user = request.getSession().getAttribute(UserConstant.USER_LOGIN_STATE);
+        if (null == user) {
+            throw new BusinessException(NOT_AUTH, "未被认证");
+        }
+        return (UserVO) user;
+    }
+
+    /**
+     * 用户请求更改自己的信息
+     * @param userVO 用户更新视图
+     * @param request request
+     */
+    @Override
+    public void updateUserInfo(UserVO userVO, HttpServletRequest request) {
+        // 1. 校验
+        if (null == userVO) {
+            return;
+        }
+        UserVO loginUser = getLoginUser(request);
+        if (!loginUser.getId().equals(userVO.getId())) {
+            throw new BusinessException(REFUSE, "授权失败");
+        }
+        User oldUser = userDao.selectById(userVO.getId());
+        if (null == oldUser) {
+            throw new BusinessException(ERROR, "空");
+        }
+        User user = BeanCopyUtils.copyObject(userVO, User.class);
+        userDao.updateById(user);
     }
 }

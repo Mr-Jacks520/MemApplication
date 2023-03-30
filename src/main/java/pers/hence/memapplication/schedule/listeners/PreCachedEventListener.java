@@ -28,6 +28,8 @@ public class PreCachedEventListener implements ApplicationListener<PreCachedEven
     @Autowired
     private RedisUtil redisUtil;
 
+    private static final long EXPIRE = 39600;
+
     /**
      * 进行redis缓存预热
      * @param event 事件
@@ -51,6 +53,8 @@ public class PreCachedEventListener implements ApplicationListener<PreCachedEven
         }
         // 加入缓存
         redisUtil.add(PREJOB_PREFIX, map);
+        // 设置过期时间: 11h
+        redisUtil.expire(PREJOB_PREFIX, EXPIRE);
         log.info("缓存预热完成");
     }
 }

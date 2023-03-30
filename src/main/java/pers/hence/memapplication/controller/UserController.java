@@ -2,11 +2,7 @@ package pers.hence.memapplication.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.*;
 import pers.hence.memapplication.exception.BusinessException;
 import pers.hence.memapplication.model.request.UserLoginRequest;
 import pers.hence.memapplication.model.request.UserRegisterRequest;
@@ -74,5 +70,23 @@ public class UserController {
         }
         UserVO userVO = userService.userLogin(userMail, userPass, request);
         return Result.sucess("", userVO);
+    }
+
+    /**
+     * 更新用户信息
+     * @param userVO 请求体
+     * @param request request
+     * @return 统一结果封装
+     */
+    @PutMapping("/update")
+    public Result<?> updateInfo(@RequestBody UserVO userVO, HttpServletRequest request) {
+        if (null == userVO) {
+            return Result.fail("参数为空");
+        }
+        if (StringUtils.isAnyBlank(userVO.getUserName(), userVO.getUserAvatar(), userVO.getUserMail(), String.valueOf(userVO.getUserSex()))) {
+            return Result.fail("参数为空");
+        }
+        userService.updateUserInfo(userVO, request);
+        return Result.create();
     }
 }

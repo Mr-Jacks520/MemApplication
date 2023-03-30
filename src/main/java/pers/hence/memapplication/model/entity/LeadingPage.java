@@ -1,7 +1,10 @@
 package pers.hence.memapplication.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -49,7 +52,7 @@ public class LeadingPage implements Serializable {
      * 更新时间
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
+    private LocalDateTime updatedTime;
 
     /**
      * 创建时间

@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 /**
- * @Author https://github.com/Mr-Jacks520
- * @Date 2023/3/12 13:35
+ * @author https://github.com/Mr-Jacks520
+ * @date 2023/3/12 13:35
  * @Description 自定义插入更新时间策略
  */
 @Component
@@ -27,6 +27,6 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void updateFill(MetaObject metaObject) {
         log.info("start update fill ....");
-        this.fillStrategy(metaObject, "updateTime", LocalDateTime.now());
+        this.fillStrategy(metaObject, "updatedTime", LocalDateTime.now());
     }
 }

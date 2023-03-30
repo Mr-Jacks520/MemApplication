@@ -11,54 +11,28 @@ import java.time.LocalDateTime;
 
 /**
  * @author https://github.com/Mr-Jacks520
- * @date 2023/3/12 12:57
- * @Description 记忆内容实体类
+ * @date 2023/3/30 13:23
+ * @description 用户帖子类
  */
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@TableName("mem_content")
-public class MemContent implements Serializable {
+@TableName("user_blog")
+public class UserBlog implements Serializable {
 
     @TableId(type = IdType.AUTO)
     private Integer id;
 
     /**
-     * 标题
+     * 帖子内容:富文本
      */
-    private String title;
+    private String content;
 
     /**
-     * 类型
+     * 点赞数
      */
-    private Integer type;
-
-    /**
-     * 大小
-     */
-    private String size;
-
-    /**
-     * 复习时间列表JSON
-     */
-    private String reviewTimes;
-
-    /**
-     * 下次复习时间
-     */
-    private String nextReview;
-
-    /**
-     * 是否需要进行提醒复习
-     */
-    private Integer isComplete;
-
-    /**
-     * 存储路径
-     */
-    private String storagePath;
+    private String thumbs;
 
     /**
      * 逻辑删除
@@ -79,7 +53,7 @@ public class MemContent implements Serializable {
     private LocalDateTime createdTime;
 
     /**
-     * 用户ID
+     * 发布用户ID
      */
     private Integer userId;
 }

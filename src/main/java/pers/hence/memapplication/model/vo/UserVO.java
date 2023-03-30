@@ -1,6 +1,5 @@
 package pers.hence.memapplication.model.vo;
 
-import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +18,6 @@ public class UserVO implements Serializable {
     /**
      * 用户ID
      */
-    @TableId(type = IdType.AUTO)
     private Integer id;
 
     /**
