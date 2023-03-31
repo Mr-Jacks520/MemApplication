@@ -1,5 +1,6 @@
 package pers.hence.memapplication.controller;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +18,7 @@ import java.util.List;
  * @date 2023/3/28 15:08
  * @description 记忆内容控制层
  */
+@Api(tags = "记忆内容模块")
 @RestController
 @RequestMapping("/memcontent")
 public class MemContentController {
@@ -24,6 +26,12 @@ public class MemContentController {
     @Autowired
     private MemContentService memContentService;
 
+    /**
+     * 上传记忆内容文件
+     * @param file 文件
+     * @param request  request
+     * @return null
+     */
     @PostMapping("/upload")
     public Result<?> upload(MultipartFile file, HttpServletRequest request) {
         if (file == null) {

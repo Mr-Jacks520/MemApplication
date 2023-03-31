@@ -1,5 +1,6 @@
 package pers.hence.memapplication.controller;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import pers.hence.memapplication.service.LeadingPageService;
  * @date 2023/3/23 17:48
  * @description 引导页控制层
  */
+@Api(tags = "引导页模块")
 @RestController
 @RequestMapping("/leading")
 public class LeadingPageController {

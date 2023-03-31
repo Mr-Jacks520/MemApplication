@@ -1,5 +1,6 @@
 package pers.hence.memapplication.controller;
 
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ import static pers.hence.memapplication.constant.StatusCode.ERROR;
  * @date 2023/3/25 22:34
  * @description 用户控制层
  */
+@Api(tags = "用户模块")
 @RestController
 @Slf4j
 @RequestMapping("/user")
@@ -29,6 +31,11 @@ public class UserController {
     @Resource
     private UserService userService;
 
+    /**
+     * 发送邮箱验证码
+     * @param userSendMailRequest request
+     * @return null
+     */
     @PostMapping("/sendCode")
     public Result<?> sendVerifyCode(@RequestBody UserSendMailRequest userSendMailRequest) {
         // 校验
@@ -42,6 +49,11 @@ public class UserController {
         return Result.create();
     }
 
+    /**
+     * 用户注册
+     * @param userRegisterRequest request
+     * @return Integer
+     */
     @PostMapping("/register")
     public Result<?> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
         if (null == userRegisterRequest) {
@@ -58,6 +70,12 @@ public class UserController {
         return Result.sucess("注册成功", ret);
     }
 
+    /**
+     * 用户登录
+     * @param userLoginRequest request
+     * @param request request
+     * @return userVO
+     */
     @PostMapping("/login")
     public Result<?> userLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request) {
         if (null == userLoginRequest) {
