@@ -5,7 +5,8 @@ import lombok.ToString;
 
 import java.io.Serializable;
 
-import static pers.hence.memapplication.constant.StatusCode.*;
+import static pers.hence.memapplication.constant.StatusCode.ERROR;
+import static pers.hence.memapplication.constant.StatusCode.OK;
 
 /**
  * @author https://github.com/Mr-Jacks520
@@ -69,6 +70,17 @@ public class Result<T> implements Serializable {
      */
     public static<T> Result<T> create() {
         return new Result<>(OK);
+    }
+
+    /**
+     * 创建自定义返回结果
+     * @param code 状态码
+     * @param msg 信息
+     * @param <T> 泛型
+     * @return 封装结果
+     */
+    public static<T> Result<T> create(Integer code, String msg) {
+        return new Result<>(code, msg);
     }
 
     /**

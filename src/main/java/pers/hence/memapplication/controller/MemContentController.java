@@ -35,31 +35,31 @@ public class MemContentController {
 
     /**
      * 获取今日记忆内容
-     * @param memContentRequest 请求体
+     * @param userId 请求用户ID
      * @param request request
      * @return 统一结果返回
      */
     @GetMapping("/content")
-    public Result<?> getMemContent(@RequestBody MemContentRequest memContentRequest, HttpServletRequest request) {
-        if (null == memContentRequest) {
+    public Result<?> getMemContent(Integer userId, HttpServletRequest request) {
+        if (null == userId) {
             return Result.fail("参数空");
         }
-        List<MemContentVO> reviewContent = memContentService.getReviewContent(memContentRequest.getUserId(), request);
+        List<MemContentVO> reviewContent = memContentService.getReviewContent(userId, request);
         return Result.sucess("ok", reviewContent);
     }
 
     /**
      * 获取历史上传文件
-     * @param memContentRequest 请求体
+     * @param userId 请求用户ID
      * @param request request
      * @return 历史文件列表
      */
     @GetMapping("/history")
-    public Result<?> getHistoryFiles(@RequestBody MemContentRequest memContentRequest, HttpServletRequest request) {
-        if (null == memContentRequest) {
+    public Result<?> getHistoryFiles(Integer userId, HttpServletRequest request) {
+        if (null == userId) {
             return Result.fail("参数空");
         }
-        List<HistoryFileVO> historyFiles = memContentService.getHistoryFiles(memContentRequest.getUserId(), request);
+        List<HistoryFileVO> historyFiles = memContentService.getHistoryFiles(userId, request);
         return Result.sucess("ok", historyFiles);
     }
 
@@ -70,7 +70,7 @@ public class MemContentController {
      * @return 历史文件列表
      */
     @GetMapping("/search")
-    public Result<?> doSearch(@RequestBody MemContentRequest memContentRequest, HttpServletRequest request) {
+    public Result<?> doSearch(MemContentRequest memContentRequest, HttpServletRequest request) {
         if (null == memContentRequest) {
             return Result.fail("参数空");
         }

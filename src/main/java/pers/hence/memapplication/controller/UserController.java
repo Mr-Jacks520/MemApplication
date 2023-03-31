@@ -89,4 +89,18 @@ public class UserController {
         userService.updateUserInfo(userVO, request);
         return Result.create();
     }
+
+    /**
+     * 用户退出登录
+     * @param request request
+     * @return 无
+     */
+    @PostMapping("/logout")
+    public Result<?> userLogout(HttpServletRequest request) {
+        if (null == request) {
+            throw new BusinessException(ERROR, "");
+        }
+        userService.userLogout(request);
+        return Result.create();
+    }
 }

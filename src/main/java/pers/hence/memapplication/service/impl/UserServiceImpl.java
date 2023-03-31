@@ -219,4 +219,13 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         User user = BeanCopyUtils.copyObject(userVO, User.class);
         userDao.updateById(user);
     }
+
+    /**
+     * 用户登出
+     * @param request request
+     */
+    @Override
+    public void userLogout(HttpServletRequest request) {
+        request.getSession().removeAttribute(USER_LOGIN_STATE);
+    }
 }

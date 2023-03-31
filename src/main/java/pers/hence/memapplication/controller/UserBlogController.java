@@ -2,7 +2,6 @@ package pers.hence.memapplication.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pers.hence.memapplication.model.request.BaseRequest;
 import pers.hence.memapplication.model.request.BlogPublishRequest;
 import pers.hence.memapplication.model.vo.Result;
 import pers.hence.memapplication.model.vo.UserBlogVO;
@@ -36,11 +35,11 @@ public class UserBlogController {
     }
 
     @GetMapping("/blogs")
-    public Result<?> getBlogs(@RequestBody BaseRequest baseRequest, HttpServletRequest request) {
-        if (null == baseRequest) {
+    public Result<?> getBlogs(Integer userId, HttpServletRequest request) {
+        if (null == userId) {
             return Result.fail("参数空");
         }
-        List<UserBlogVO> userBlogList = userBlogService.getUserBlogList(baseRequest.getUserId(), request);
+        List<UserBlogVO> userBlogList = userBlogService.getUserBlogList(userId, request);
         return Result.sucess("ok", userBlogList);
     }
 }

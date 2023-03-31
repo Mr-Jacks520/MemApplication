@@ -19,6 +19,8 @@ public class HistoryFileVO implements Serializable {
 
     private Integer id;
 
+    private String title;
+
     private Integer type;
 
     private String size;

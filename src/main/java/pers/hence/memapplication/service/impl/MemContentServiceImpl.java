@@ -172,8 +172,8 @@ public class MemContentServiceImpl extends ServiceImpl<MemContentDao, MemContent
             // 3. 序列化
             historyFiles = BeanCopyUtils.copyList(memContents, HistoryFileVO.class);
             String value = gson.toJson(historyFiles);
-            // 4. 缓存: 5 min
-            redisUtil.set(HISTORY_FILE_PREFIX + userId, value, 60 * 5);
+            // 4. 缓存: 3 min
+            redisUtil.set(HISTORY_FILE_PREFIX + userId, value, 3);
         }
         return historyFiles;
     }
